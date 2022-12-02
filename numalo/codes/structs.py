@@ -34,7 +34,8 @@ def decorator_set_get(func):
         # print(f"_set, func_name: {func_name}, sg_name: {sg_name}")
         _data = list()
         if isinstance(data, str):
-            _data = data.split("\n")
+            _data = data.lstrip().split("\n")
+            _data = list(map(lambda s: s + "\n", _data))
         elif isinstance(data, (list, tuple)):
             _data = data
         setattr(self, sg_name, _data)
@@ -112,6 +113,8 @@ class CodeTemp(object):
             i_key = self.get_match_key(line)
             if i_key:
                 _key = i_key
+                if _key == self._keys[0]:
+                    getattr(self, _key).append(line)
             else:
                 getattr(self, _key).append(line)
 
@@ -121,7 +124,7 @@ class CodeTemp(object):
         for key in self._keys:
             val = getattr(self, key)
 
-            if key != self._keys:
+            if key != self._keys[0]:
                 val = [f"# {key.lstrip('_')}\n"] + val
             if key == "_code":
                 val = self.remove_def(val)
@@ -214,6 +217,68 @@ class CodeTemp(object):
             if line.startswith("def "):
                 break
         return val
+
+    def dump_empty(self, file):
+        one = CodeTemp()
+        one.set_start(
+            """
+#!/usr/bin/env python
+# -*- coding:utf-8 -*-
+# @FileName  : template.py
+# @Author    : Bangguo Chen
+# @Email     : mail@cbguo.com
+# @Demand    : 
+# @Solution  : 
+#
+
+
+            """
+        )
+
+        one.set_include_packages(
+            '''
+from typing import List, Callable
+
+            '''
+        )
+
+        one.set_description(
+            '''
+""" 
+
+
+
+"""
+
+
+            '''
+        )
+        one.set_code(
+            '''
+"""
+
+"""
+
+
+            '''
+        )
+
+        one.set_test(
+            '''
+def test():
+    pass
+
+
+            '''
+        )
+        one.set_main(
+            r'''
+if __name__ == '__main__':
+    test()
+
+            '''
+        )
+        one.dump(file)
 
 
 if __name__ == '__main__':

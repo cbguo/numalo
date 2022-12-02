@@ -28,8 +28,7 @@ def py_template_empty():
     args = parser.parse_args()
 
     ct = CodeTemp()
-    ct.load(os.path.join(cfg.PATH_CODES_TEMPLATE))
-    ct.dump(args.dst)
+    ct.dump_empty(args.dst)
 
 
 def py_template():

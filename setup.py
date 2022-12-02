@@ -31,7 +31,7 @@ setup(
     entry_points={
         "console_scripts": [
             "numalo.py_template = numalo.scripts.templates.template:py_template",
-            "numalo.py_template_empty = numalo.scripts.templates.template:py_template_tempty",
+            "numalo.py_template_empty = numalo.scripts.templates.template:py_template_empty",
         ]
     }
     # package_data={
